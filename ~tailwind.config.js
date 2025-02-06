@@ -11,7 +11,7 @@ module.exports = {
       },
       // Set theme colors (Required config!)
       colors: {
-        primary: colors.blue,
+        primary: '#74B6DA',
         secondary: colors.slate,
       },
     },
