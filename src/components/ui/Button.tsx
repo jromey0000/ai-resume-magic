@@ -28,13 +28,13 @@ const buttonVariants = cva('border', {
   variants: {
     variant: {
       primary:
-        'rounded-lg border-primary bg-primary px-5 py-2.5 text-center text-sm font-medium text-white shadow-sm transition-all hover:border-primary hover:bg-primary focus:ring focus:ring-primary-200 disabled:cursor-not-allowed disabled:border-primary-300 disabled:bg-primary-300',
+        'rounded-lg border-primary bg-primary px-5 py-2.5 text-center text-sm font-medium text-white shadow-sm transition-all hover:border-primary hover:bg-primary focus:ring focus:ring-primary-200 disabled:cursor-not-allowed hover:cursor-pointer dark:disabled:border-1 disabled:border-cod-gray-600 disabled:bg-cod-gray-600 disabled:opacity-50',
       secondary:
-        'rounded-lg border-gray-300 bg-white px-5 py-2.5 text-center text-sm font-medium text-gray-700 shadow-sm transition-all hover:bg-gray-100 focus:ring focus:ring-gray-100 disabled:cursor-not-allowed disabled:border-gray-100 disabled:bg-gray-50 disabled:text-gray-400',
-      transparent:
-        'rounded-lg border-transparent bg-transparent px-5 py-2.5 text-center text-sm font-medium text-gray-700 shadow-none transition-all hover:bg-gray-100 disabled:bg-transparent disabled:text-gray-400',
+        'rounded-lg border-secondary bg-secondary px-5 py-2.5 text-center text-sm font-medium text-white shadow-sm transition-all hover:bg-picton-blue-500 focus:ring focus:ring-gray-100 disabled:cursor-not-allowed dark:disabled:border-1 disabled:border-cod-gray-600 disabled:bg-cod-gray-600 disabled:opacity-50 disabled:text-gray-400 hover:cursor-pointer',
+      ghost:
+        'rounded-lg border-primary bg-transparent px-5 py-2.5 text-center text-sm font-medium text-primary shadow-none transition-all hover:bg-primary hover:text-white disabled:bg-transparent disabled:text-gray-400 hover:cursor-pointer',
       error:
-        'rounded-lg border-red-500 bg-red-500 px-5 py-2.5 text-center text-sm font-medium text-white shadow-sm transition-all hover:border-red-700 hover:bg-red-700 focus:ring focus:ring-red-200 disabled:cursor-not-allowed disabled:border-red-300 disabled:bg-red-300',
+        'rounded-lg border-red-500 bg-red-500 px-5 py-2.5 text-center text-sm font-medium text-white shadow-sm transition-all hover:border-red-700 hover:bg-red-700 focus:ring focus:ring-red-200 disabled:cursor-not-allowed disabled:border-red-300 disabled:bg-red-300 hover:cursor-pointer',
       success:
         'rounded-lg border border-green-500 bg-green-500 px-5 py-2.5 text-center text-sm font-medium text-white shadow-sm transition-all hover:border-green-700 hover:bg-green-700 focus:ring focus:ring-green-200 disabled:cursor-not-allowed disabled:border-green-300 disabled:bg-green-300',
     },

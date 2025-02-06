@@ -4,6 +4,7 @@ import './index.css';
 import App from './App.tsx';
 import { createBrowserRouter, RouterProvider } from 'react-router-dom';
 import { ClerkProvider } from '@clerk/clerk-react';
+import { NotificationProvider } from './utils/providers.tsx';
 import SignInPage from './auth/SignInPage.tsx';
 import Home from './routes/Home.tsx';
 import Dashboard from './routes/Dashboard.tsx';
@@ -37,7 +38,9 @@ const router = createBrowserRouter([
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
     <ClerkProvider publishableKey={PUBLISHABLE_KEY}>
-      <RouterProvider router={router} />
+      <NotificationProvider>
+        <RouterProvider router={router} />
+      </NotificationProvider>
     </ClerkProvider>
   </StrictMode>
 );

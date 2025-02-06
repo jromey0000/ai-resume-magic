@@ -1,4 +1,5 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState, createContext, useContext } from 'react';
+import { NotificationContextType } from '@/types';
 
 export const useThemeDetector = () => {
   const getCurrentTheme = () =>
@@ -16,4 +17,21 @@ export const useThemeDetector = () => {
   }, []);
 
   return isDarkTheme;
+};
+
+const defaultContext: NotificationContextType = {
+  addNotification: () => {}, // Default no-op function for safety
+};
+
+// Create the context with the default value
+export const NotificationContext = createContext(defaultContext);
+
+export const useNotification = () => {
+  const context = useContext(NotificationContext);
+  if (!context) {
+    throw new Error(
+      'useNotification must be used within a NotificationProvider'
+    );
+  }
+  return context;
 };

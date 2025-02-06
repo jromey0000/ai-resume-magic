@@ -9,7 +9,7 @@ function Header() {
   const isDarkMode = useThemeDetector();
 
   return (
-    <div className="flex items-center justify-between  p-4 mb-14 shadow-lg">
+    <div className="flex items-center justify-between p-4 mb-14 shadow-lg dark:border-b-1 dark:border-black">
       <Link to={'/'}>
         <img src="/ai-resume-magic.svg" style={{ height: '35px' }} />
       </Link>
@@ -17,7 +17,7 @@ function Header() {
       {isSignedIn && isLoaded ? (
         <div className="flex items-center">
           <Link to={'/dashboard'}>
-            <Button variant="secondary">Dashboard</Button>
+            <Button variant="ghost">Dashboard</Button>
           </Link>
 
           <div className="ml-4">
