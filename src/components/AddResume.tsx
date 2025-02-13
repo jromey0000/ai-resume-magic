@@ -16,7 +16,7 @@ function AddResume() {
   return (
     <div>
       <div
-        className="p-14 py-24 border-dotted items-center flex justify-center rounded-lg h-[280px] bg-cod-gray-100 hover:bg-cod-gray-200 dark:bg-cod-gray-900 dark:hover:bg-cod-gray-800 hover:scale-105 transition-all hover:shadow-md cursor-pointer"
+        className="p-14 py-24 border-dashed border-2 border-cod-gray-300 items-center flex justify-center rounded-lg h-[280px] bg-cod-gray-100 hover:bg-cod-gray-200 dark:bg-cod-gray-900 dark:hover:bg-cod-gray-800 hover:scale-105 transition-all hover:shadow-md cursor-pointer"
         onClick={handleOpenModal}>
         <PlusSquare />
       </div>

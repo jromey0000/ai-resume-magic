@@ -6,8 +6,9 @@ import { createBrowserRouter, RouterProvider } from 'react-router-dom';
 import { ClerkProvider } from '@clerk/clerk-react';
 import { NotificationProvider } from './utils/providers.tsx';
 import SignInPage from './auth/SignInPage.tsx';
-import Home from './routes/Home.tsx';
-import Dashboard from './routes/Dashboard.tsx';
+import Home from './components/Home.tsx';
+import Dashboard from './dashboard/index.tsx';
+import EditResume from './dashboard/resume/[resumeId]/edit/index.tsx';
 
 const PUBLISHABLE_KEY = import.meta.env.VITE_CLERK_PUBLISHABLE_KEY;
 
@@ -22,6 +23,10 @@ const router = createBrowserRouter([
       {
         path: '/dashboard',
         element: <Dashboard />,
+      },
+      {
+        path: '/dashboard/resume/:resumeId/edit',
+        element: <EditResume />,
       },
     ],
   },

@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { v4 as uuidv4 } from 'uuid';
 import { CreateNewResume } from '@/services/GlobalApi';
 import { useUser } from '@clerk/clerk-react';
@@ -19,6 +20,7 @@ function AddResumeModal({ showModal, onClose }: AddResumeModalProps) {
 
   const { user } = useUser();
   const { addNotification } = useNotification();
+  const navigate = useNavigate();
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setResumeTitle(event.target.value);
@@ -28,7 +30,6 @@ function AddResumeModal({ showModal, onClose }: AddResumeModalProps) {
     addNotification({
       title: 'Succesfully created resume title',
       message: '',
-      onViewMore: () => console.log('View more clicked'),
     });
   };
 
@@ -49,6 +50,7 @@ function AddResumeModal({ showModal, onClose }: AddResumeModalProps) {
       if (response) {
         setIsLoading(false);
         showNotifiction();
+        navigate(`/dashboard/resume/${uuid}/edit`);
       } else {
         setIsLoading(false);
         // throw a toast message for error
