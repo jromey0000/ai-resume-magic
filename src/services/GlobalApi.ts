@@ -1,4 +1,3 @@
-import { UserResume } from '@/types';
 import Axios from 'axios';
 import { setupCache } from 'axios-cache-interceptor';
 

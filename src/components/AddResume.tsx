@@ -7,7 +7,6 @@ import { PlusSquare } from 'lucide-react';
 import { CreateNewResume } from '@/services/GlobalApi';
 
 import { useNotification } from '@/utils/hooks';
-import { UserResume } from '@/types';
 
 import AddResumeModal from './AddResumeModal';
 

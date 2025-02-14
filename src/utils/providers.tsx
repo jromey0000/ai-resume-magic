@@ -1,6 +1,5 @@
 import { useState, ReactNode } from 'react';
 import Notification from '@/components/ui/Notification';
-import { NotificationType } from '@/types';
 import { NotificationContext } from './hooks';
 
 // Corrected NotificationProviderProps interface

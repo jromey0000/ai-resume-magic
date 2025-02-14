@@ -1,5 +1,4 @@
 import { createContext } from 'react';
-import { ResumeInfo } from '@/types';
 
 interface ResumeInfoContextType {
   resumeInfo: ResumeInfo | null;

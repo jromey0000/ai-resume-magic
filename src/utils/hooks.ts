@@ -1,5 +1,4 @@
 import { useEffect, useState, createContext, useContext } from 'react';
-import { NotificationContextType } from '@/types';
 
 export const useThemeDetector = () => {
   const getCurrentTheme = () =>

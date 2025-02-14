@@ -1,5 +1,3 @@
-import { ResumeInfo } from '@/types';
-
 interface ExperienceSectionProps {
   resumeInfo: ResumeInfo | null;
 }

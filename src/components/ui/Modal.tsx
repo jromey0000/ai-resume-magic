@@ -40,7 +40,7 @@ const Modal = ({
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4 sm:p-0">
       <div
-        className="fixed inset-0 bg-black opacity-75 transition-opacity duration-300"
+        className="fixed inset-0 bg-black opacity-85 transition-opacity duration-300"
         onClick={onClose}></div>
       <div className="relative mx-auto overflow-hidden rounded-lg bg-white dark:bg-cod-gray-900 shadow-xl sm:w-full sm:max-w-xl">
         <div className="p-6">

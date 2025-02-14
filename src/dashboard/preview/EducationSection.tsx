@@ -1,5 +1,3 @@
-import { ResumeInfo } from '@/types';
-
 interface EducationSectionProps {
   resumeInfo: ResumeInfo | null;
 }
