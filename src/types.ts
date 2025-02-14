@@ -34,3 +34,44 @@ export interface Resume {
   updatedAt: string;
   publishedAt: string;
 }
+
+interface Experience {
+  id: number;
+  title: string;
+  companyName: string;
+  city: string;
+  state: string;
+  startDate: string;
+  endDate: string;
+  currentlyWorking: boolean;
+  workSummary: string;
+}
+
+interface Education {
+  id: number;
+  degree: string;
+  school: string;
+  city: string;
+  state: string;
+  graduationDate: string;
+}
+
+interface Skill {
+  id: number;
+  name: string;
+  level: string;
+}
+
+export interface ResumeInfo {
+  firstName: string;
+  lastName: string;
+  jobTitle: string;
+  address: string;
+  phone: string;
+  email: string;
+  themeColor: string;
+  summary: string;
+  experience: Experience[];
+  education: Education[];
+  skills: Skill[];
+}

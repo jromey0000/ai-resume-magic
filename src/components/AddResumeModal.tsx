@@ -1,73 +1,25 @@
-import { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
-import { v4 as uuidv4 } from 'uuid';
-import { CreateNewResume } from '@/services/GlobalApi';
-import { useUser } from '@clerk/clerk-react';
 import Modal from '@/components/ui/Modal';
 import Input from '@/components/ui/Input';
-import { useNotification } from '@/utils/hooks';
-import { UserResume } from '@/types';
+
 import { Loader2 } from 'lucide-react';
 
 interface AddResumeModalProps {
-  showModal: boolean;
+  isLoading: boolean;
+  onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
   onClose: () => void;
+  onCreateResume: () => void;
+  resumeTitle: string;
+  showModal: boolean;
 }
 
-function AddResumeModal({ showModal, onClose }: AddResumeModalProps) {
-  const [resumeTitle, setResumeTitle] = useState('');
-  const [isLoading, setIsLoading] = useState(false);
-
-  const { user } = useUser();
-  const { addNotification } = useNotification();
-  const navigate = useNavigate();
-
-  const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setResumeTitle(event.target.value);
-  };
-
-  const showNotifiction = () => {
-    addNotification({
-      title: 'Succesfully created resume title',
-      message: '',
-    });
-  };
-
-  const onCreate = async () => {
-    setIsLoading(true);
-    const uuid = uuidv4();
-    const data: UserResume = {
-      data: {
-        title: resumeTitle,
-        resumeId: uuid,
-        userEmail: user?.primaryEmailAddress?.emailAddress,
-        userName: user?.fullName,
-      },
-    };
-
-    try {
-      const response = await CreateNewResume(data);
-      if (response) {
-        setIsLoading(false);
-        showNotifiction();
-        navigate(`/dashboard/resume/${uuid}/edit`);
-      } else {
-        setIsLoading(false);
-        // throw a toast message for error
-        showNotifiction();
-      }
-    } catch (err) {
-      setIsLoading(false);
-      if (err instanceof Error) {
-        throw new Error(err.message);
-      } else {
-        throw new Error(String(err));
-      }
-    }
-
-    onClose();
-  };
-
+function AddResumeModal({
+  isLoading,
+  onChange,
+  onClose,
+  onCreateResume,
+  resumeTitle,
+  showModal,
+}: AddResumeModalProps) {
   return (
     <div>
       <Modal
@@ -82,7 +34,7 @@ function AddResumeModal({ showModal, onClose }: AddResumeModalProps) {
           },
           {
             label: isLoading ? <Loader2 className="animate-spin" /> : 'Create',
-            onClick: () => onCreate(),
+            onClick: () => onCreateResume(),
             variant: 'primary',
             disabled: !resumeTitle || isLoading,
           },
@@ -91,7 +43,7 @@ function AddResumeModal({ showModal, onClose }: AddResumeModalProps) {
         <Input
           placeholder="Ex. Full Stack Developer Resume"
           value={resumeTitle}
-          onChange={(e) => handleChange(e)}
+          onChange={(e) => onChange(e)}
           maxLength={50}
           autoFocus
         />
