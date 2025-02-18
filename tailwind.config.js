@@ -14,6 +14,16 @@ module.exports = {
         primary: '#74B6DA',
         secondary: colors.slate,
       },
+      keyframes: {
+        animatedgradient: {
+          '0%': { backgroundPosition: '0% 50%' },
+          '50%': { backgroundPosition: '100% 50%' },
+          '100%': { backgroundPosition: '0% 50%' },
+        },
+      },
+      animation: {
+        gradient: 'animatedgradient 6s ease infinite alternate',
+      },
     },
     fontFamily: {
       sans: ['Inter', ...defaultTheme.fontFamily.sans],

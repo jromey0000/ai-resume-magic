@@ -1,10 +1,47 @@
+import { Link } from 'react-router-dom';
 import Header from '@/components/custom/Header';
+import { WandSparkles } from 'lucide-react';
+import Button from './ui/Button';
 
 function Home() {
   return (
     <>
       <Header />
-      <h1>Home</h1>
+
+      <div className="container mx-auto p-4">
+        <h1 className="text-6xl text-center font-extrabold mb-8">
+          Find your dream job
+          <br /> with our{' '}
+          <span className="bg-gradient-to-r from-secondary via-fuchsia-pink-300 to-primary text-transparent bg-clip-text animate-gradient bg-300%">
+            AI Powered
+          </span>{' '}
+          resume builder
+        </h1>
+        <h2 className="text-center text-3xl mt-4 font-medium">
+          Build professional and outstanding resumes lightning fast <br />
+          with our free builder and templates. <br />
+          <div className="flex justify-center items-center my-6">
+            Its as if it were
+            <span className="bg-gradient-to-r from-secondary via-fuchsia-pink-300 to-primary text-transparent bg-clip-text animate-gradient bg-300% font-extrabold ml-2">
+              MAGIC
+            </span>
+            <WandSparkles
+              height={30}
+              width={30}
+              className="stroke-fuchsia-pink-300 ml-3"
+            />
+          </div>
+        </h2>
+        <div>
+          <div className="flex justify-center items-center mt-6">
+            <Link to={'/dashboard'}>
+              <Button className="text-2xl my-5" variant="ghost">
+                Create new resume
+              </Button>
+            </Link>
+          </div>
+        </div>
+      </div>
     </>
   );
 }
