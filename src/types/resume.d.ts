@@ -29,16 +29,19 @@ interface Experience {
 interface Education {
   id: number;
   degree: string;
+  major: string;
   school: string;
   city: string;
   state: string;
-  graduationDate: string;
+  startDate: string;
+  endDate: string;
+  description: string;
 }
 
 interface Skill {
   id: number;
   name: string;
-  level: string;
+  rating: number;
 }
 
 interface ResumeInfo {

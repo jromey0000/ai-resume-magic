@@ -3,7 +3,11 @@ interface SummarySectionProps {
 }
 
 function SummarySection({ resumeInfo }: SummarySectionProps) {
-  return <div>SummarySection</div>;
+  return (
+    <div>
+      <p className="text-xs mb-4">{resumeInfo?.summary}</p>
+    </div>
+  );
 }
 
 export default SummarySection;

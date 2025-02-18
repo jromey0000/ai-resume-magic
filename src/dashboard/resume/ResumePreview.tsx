@@ -11,7 +11,7 @@ function ResumePreview() {
 
   return (
     <div
-      className="shadow-lg h-full p-8 border-t-[20px]"
+      className="shadow-lg h-full p-8 border-t-[4px] border-colorVariants[resumeInfo?.themeColor]"
       style={{ borderColor: resumeInfo?.themeColor }}>
       {/* Personal Information */}
       <PersonalDetailPreview resumeInfo={resumeInfo} />
