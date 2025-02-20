@@ -4,9 +4,9 @@ import { v4 as uuidv4 } from 'uuid';
 
 import { useUser } from '@clerk/clerk-react';
 import { PlusSquare } from 'lucide-react';
-import { CreateNewResume } from '@/services/GlobalApi';
+import { useCreateNewResume } from '@/lib/hooks/resume';
 
-import { useNotification } from '@/utils/hooks';
+import { useNotification } from '@/lib/utils/hooks';
 
 import AddResumeModal from './AddResumeModal';
 
@@ -18,6 +18,7 @@ function AddResume() {
   const { user } = useUser();
   const { addNotification } = useNotification();
   const navigate = useNavigate();
+  const { createNewResume, data, error } = useCreateNewResume();
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setResumeTitle(event.target.value);
@@ -51,7 +52,7 @@ function AddResume() {
     };
 
     try {
-      const response = await CreateNewResume(data);
+      const response = await createNewResume(data);
       if (response) {
         const { documentId } = response.data.data;
 

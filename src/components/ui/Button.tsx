@@ -1,6 +1,6 @@
 import { cva, VariantProps } from 'class-variance-authority';
 import { ButtonHTMLAttributes, ReactNode } from 'react';
-import cn from '@/utils/cn';
+import cn from '@/lib/utils/cn';
 
 interface ButtonProps
   extends ButtonHTMLAttributes<HTMLButtonElement>,

@@ -1,35 +1,21 @@
-import { useEffect, useState } from 'react';
 import AddResume from '@/components/AddResume';
 import { useUser } from '@clerk/clerk-react';
-import { GetUserResumes } from '@/services/GlobalApi';
+import { useGetUserResumes } from '@/lib/hooks/resume';
 import ResumeItem from './ResumeItem';
 
 function Dashboard() {
-  const [resumeList, setResumeList] = useState([]);
   const { user } = useUser();
+  const {
+    data: resumeList,
+    error,
+    isLoading,
+  } = useGetUserResumes(user?.primaryEmailAddress?.emailAddress as string);
 
-  const getResumeList = async () => {
-    try {
-      const response = await GetUserResumes(
-        user?.primaryEmailAddress?.emailAddress as string
-      );
-
-      if (response) {
-        const data = await response.data.data;
-        setResumeList(data);
-      }
-    } catch (err) {
-      if (err instanceof Error) {
-        throw new Error(err.message);
-      } else {
-        throw new Error(String(err));
-      }
-    }
-  };
-
-  useEffect(() => {
-    if (user) getResumeList();
-  }, [user]);
+  if (isLoading)
+    return (
+      <div className="text-primary p-4 text-center">Loading resumes...</div>
+    );
+  if (error) return <div>Error loading resumes: {error.message}</div>;
 
   return (
     <div className="p-10 md:px-15 lg:px-20">
@@ -37,7 +23,7 @@ function Dashboard() {
       <p>Start creating your AI resume.</p>
       <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 mt-10 gap-10">
         <AddResume />
-        {resumeList?.map((resume, index) => (
+        {resumeList?.map((resume: Resume, index: number) => (
           <ResumeItem key={index} resume={resume} />
         ))}
       </div>

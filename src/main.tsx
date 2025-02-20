@@ -4,13 +4,14 @@ import './index.css';
 import App from './App.tsx';
 import { createBrowserRouter, RouterProvider } from 'react-router-dom';
 import { ClerkProvider } from '@clerk/clerk-react';
-import { NotificationProvider } from './utils/providers.tsx';
+import { NotificationProvider } from './lib/utils/providers';
 import SignInPage from './auth/SignInPage.tsx';
 import Home from './components/Home.tsx';
 import Dashboard from './dashboard/index.tsx';
 import EditResume from './dashboard/resume/[resumeId]/edit/index.tsx';
+import config from '@/config';
 
-const PUBLISHABLE_KEY = import.meta.env.VITE_CLERK_PUBLISHABLE_KEY;
+const PUBLISHABLE_KEY = config.CLERK_PUBLISHABLE_KEY;
 
 if (!PUBLISHABLE_KEY) {
   throw new Error('Missing Publishable Key');

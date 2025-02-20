@@ -1,7 +1,7 @@
 import { Link } from 'react-router-dom';
 import { useUser, UserButton } from '@clerk/clerk-react';
 import { dark } from '@clerk/themes';
-import { useThemeDetector } from '@/utils/hooks';
+import { useThemeDetector } from '@/lib/utils/hooks';
 import Button from '@/components/ui/Button';
 
 function Header() {

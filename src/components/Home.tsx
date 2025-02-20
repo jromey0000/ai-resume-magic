@@ -9,7 +9,7 @@ function Home() {
       <Header />
 
       <div className="container mx-auto p-4">
-        <h1 className="text-6xl text-center font-extrabold mb-8">
+        <h1 className="text-6xl text-center font-extrabold my-8">
           Find your dream job
           <br /> with our{' '}
           <span className="bg-gradient-to-r from-secondary via-fuchsia-pink-300 to-primary text-transparent bg-clip-text animate-gradient bg-300%">
@@ -17,18 +17,18 @@ function Home() {
           </span>{' '}
           resume builder
         </h1>
-        <h2 className="text-center text-3xl mt-4 font-medium">
+        <h2 className="text-center text-3xl my-6 font-medium">
           Build professional and outstanding resumes lightning fast <br />
-          with our free builder and templates. <br />
+          with our free resume builder. <br />
           <div className="flex justify-center items-center my-6">
-            Its as if it were
+            Its so fast its like
             <span className="bg-gradient-to-r from-secondary via-fuchsia-pink-300 to-primary text-transparent bg-clip-text animate-gradient bg-300% font-extrabold ml-2">
               MAGIC
             </span>
             <WandSparkles
               height={30}
               width={30}
-              className="stroke-fuchsia-pink-300 ml-3"
+              className="stroke-fuchsia-pink-300 my-3"
             />
           </div>
         </h2>

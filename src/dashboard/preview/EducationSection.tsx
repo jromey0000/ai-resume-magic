@@ -1,4 +1,4 @@
-import { formatDate } from '@/utils/date';
+import { formatDate } from '@/lib/utils/date';
 
 interface EducationSectionProps {
   resumeInfo: ResumeInfo | null;
