@@ -32,7 +32,7 @@ const buttonVariants = cva('border', {
       secondary:
         'rounded-lg border-secondary bg-secondary px-5 py-2.5 text-center text-sm font-medium text-white shadow-sm transition-all hover:bg-picton-blue-500 focus:ring focus:ring-gray-100 disabled:cursor-not-allowed dark:disabled:border-1 disabled:border-cod-gray-600 disabled:bg-cod-gray-600 disabled:opacity-50 disabled:text-gray-400 hover:cursor-pointer',
       ghost:
-        'rounded-lg border-primary bg-transparent px-5 py-2.5 text-center text-sm font-medium text-primary shadow-none transition-all hover:bg-primary hover:text-white disabled:bg-transparent disabled:text-gray-400 hover:cursor-pointer',
+        'rounded-lg border-primary bg-transparent px-5 py-2.5 text-center text-sm font-medium text-primary shadow-none transition-all hover:bg-primary hover:text-white disabled:bg-transparent disabled:border-cod-gray-600 disabled:text-gray-400 disabled:cursor-not-allowed hover:cursor-pointer',
       error:
         'rounded-lg border-red-500 bg-red-500 px-5 py-2.5 text-center text-sm font-medium text-white shadow-sm transition-all hover:border-red-700 hover:bg-red-700 focus:ring focus:ring-red-200 disabled:cursor-not-allowed disabled:border-red-300 disabled:bg-red-300 hover:cursor-pointer',
       success:

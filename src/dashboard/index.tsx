@@ -1,6 +1,7 @@
 import AddResume from '@/components/AddResume';
 import { useUser } from '@clerk/clerk-react';
 import { useGetUserResumes } from '@/lib/hooks/resume';
+import { Loader2 } from 'lucide-react';
 import ResumeItem from './ResumeItem';
 
 function Dashboard() {
@@ -12,8 +13,12 @@ function Dashboard() {
   } = useGetUserResumes(user?.primaryEmailAddress?.emailAddress as string);
 
   if (isLoading)
-    return (
-      <div className="text-primary p-4 text-center">Loading resumes...</div>
+    return isLoading ? (
+      <div className="flex justify-center items-center h-96">
+        <Loader2 className="animate-spin h-[45px] w-[45px]" />
+      </div>
+    ) : (
+      'Loading resumes...'
     );
   if (error) return <div>Error loading resumes: {error.message}</div>;
 

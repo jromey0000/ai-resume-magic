@@ -2,7 +2,7 @@ import { createContext } from 'react';
 
 interface ResumeInfoContextType {
   resumeInfo: ResumeInfo | null;
-  setResumeInfo: (resumeInfo: ResumeInfo) => void;
+  setResumeInfo: React.Dispatch<React.SetStateAction<ResumeInfo | null>>; // Allow functional updates
 }
 
 export const ResumeInfoContext = createContext<ResumeInfoContextType>({

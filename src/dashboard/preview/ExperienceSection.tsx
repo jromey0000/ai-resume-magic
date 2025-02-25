@@ -13,7 +13,7 @@ function ExperienceSection({ resumeInfo }: ExperienceSectionProps) {
         Professional Experience
       </h2>
       <hr className="mb-3" style={{ borderColor: resumeInfo?.themeColor }} />
-      {resumeInfo?.experience.map((experience) => (
+      {resumeInfo?.experience?.map((experience) => (
         <div key={experience?.id} className="my-4">
           <h3
             className="text-sm font-bold"

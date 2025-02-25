@@ -13,7 +13,7 @@ function EducationSection({ resumeInfo }: EducationSectionProps) {
         Education
       </h2>
       <hr className="mb-3" style={{ borderColor: resumeInfo?.themeColor }} />
-      {resumeInfo?.education.map((education) => (
+      {resumeInfo?.education?.map((education) => (
         <div key={education?.id} className="my-4">
           <h3
             className="text-sm font-bold"

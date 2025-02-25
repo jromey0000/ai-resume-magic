@@ -51,9 +51,9 @@ interface ResumeInfo {
   address: string;
   phone: string;
   email: string;
-  themeColor: string;
-  summary: string;
-  experience: Experience[];
-  education: Education[];
-  skills: Skill[];
+  themeColor?: string;
+  summary?: string;
+  experience?: Experience[];
+  education?: Education[];
+  skills?: Skill[];
 }
