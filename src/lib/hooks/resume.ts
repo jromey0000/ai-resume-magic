@@ -33,3 +33,14 @@ export const useGetUserResumes = (userEmail: string) => {
     isLoading,
   };
 };
+
+export const useGetUserResume = (id: string | undefined) => {
+  const dataKey = `/user-resumes/${id}`;
+  const getFetcher = () => fetcher(dataKey, 'GET');
+  const { data, error, isLoading } = useSWR(dataKey, getFetcher);
+  return {
+    data: data?.data || [],
+    error,
+    isLoading,
+  };
+};

@@ -1,5 +1,4 @@
-import { useContext } from 'react';
-import { ResumeInfoContext } from '@/context/ResumeInfoContext';
+import { useFormContext } from 'react-hook-form';
 import PersonalDetailPreview from '../preview/PersonalDetailSection';
 import SummarySection from '../preview/SummarySection';
 import ExperienceSection from '../preview/ExperienceSection';
@@ -7,7 +6,8 @@ import EducationSection from '../preview/EducationSection';
 import SkillsSection from '../preview/SkillsSection';
 
 function ResumePreview() {
-  const { resumeInfo } = useContext(ResumeInfoContext);
+  const { getValues } = useFormContext();
+  const resumeInfo = getValues() as ResumeInfo;
 
   return (
     <div

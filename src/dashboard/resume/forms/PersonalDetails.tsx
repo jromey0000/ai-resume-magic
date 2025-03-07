@@ -1,6 +1,7 @@
-import { useContext, useEffect, useState } from 'react';
-import { useForm, SubmitHandler } from 'react-hook-form';
-import { ResumeInfoContext } from '@/context/ResumeInfoContext';
+import { useEffect, useState } from 'react';
+import { SubmitHandler, useFormContext } from 'react-hook-form';
+import { useParams } from 'react-router-dom';
+import { updateResumeDetail } from '@/lib/utils/api';
 import Input from '@/components/ui/Input';
 import Button from '@/components/ui/Button';
 import { Loader2 } from 'lucide-react';
@@ -10,58 +11,82 @@ interface PersonalDetailsProps {
 }
 
 function PersonalDetails({ onEnabledNext }: PersonalDetailsProps) {
-  const [isInitialized, setIsInitialized] = useState(false);
   const [isSaving, setIsSaving] = useState(false);
-  const { resumeInfo, setResumeInfo } = useContext(ResumeInfoContext);
 
+  const params = useParams();
+
+  const methods = useFormContext<ResumeInfo>();
   const {
-    register,
     handleSubmit,
+    register,
     watch,
-    reset,
-    setValue,
     formState: { errors },
-  } = useForm<ResumeInfo>({
-    defaultValues: resumeInfo || {},
-  });
+  } = methods;
 
   const formValues = watch();
 
-  const onSubmit: SubmitHandler<ResumeInfo> = (data) => {
-    setIsSaving(true);
-    // TODO: just a dummy setTimeout to simulate saving data
-    // need to save the data to the backend
-    if (data) {
-      setTimeout(() => {
-        setResumeInfo({ ...resumeInfo, ...data });
+  const saveFormData = () => {
+    const payloadObj = {
+      firstName: formValues?.firstName || '',
+      lastName: formValues?.lastName || '',
+      jobTitle: formValues?.jobTitle || '',
+      address: formValues?.address || '',
+      phone: formValues?.phone || '',
+      email: formValues?.email || '',
+      themeColor: formValues?.themeColor || '',
+    };
+    const payload: PersonalDetailsFormData = { data: payloadObj };
+    (async () => {
+      try {
+        await updateResumeDetail(params?.resumeId, payload);
         setIsSaving(false);
         onEnabledNext(true);
-        reset();
+        // Show a success notification here if needed
+      } catch (err) {
+        console.error('Error saving resume details:', err);
+        setIsSaving(false);
+      }
+    })();
+  };
+
+  const onSubmit: SubmitHandler<ResumeInfo> = async (data) => {
+    setIsSaving(true);
+
+    console.log('submit ---> ', data);
+
+    if (data) {
+      setTimeout(() => {
+        saveFormData();
+        setIsSaving(false);
+        onEnabledNext(true);
       }, 5000);
     }
   };
 
-  useEffect(() => {
-    if (resumeInfo && !isInitialized) {
-      // Set initial values only once
-      Object.keys(resumeInfo).forEach((key) => {
-        setValue(key as keyof ResumeInfo, resumeInfo[key as keyof ResumeInfo]);
-      });
-
-      // Mark the form as initialized
-      setIsInitialized(true);
-    }
-  }, [resumeInfo, setValue, isInitialized]);
-
-  useEffect(() => {
-    const valuesChanged =
-      JSON.stringify(formValues) !== JSON.stringify(resumeInfo);
-
-    // Only update the context if there's an actual change
-    if (valuesChanged && isInitialized) {
-      setResumeInfo(formValues);
-    }
-  }, [formValues, resumeInfo, setResumeInfo, isInitialized]);
+  // useEffect(() => {
+  //   if (!isSaving || !formValues) return;
+  //   const payloadObj = {
+  //     firstName: formValues?.firstName || '',
+  //     lastName: formValues?.lastName || '',
+  //     jobTitle: formValues?.jobTitle || '',
+  //     address: formValues?.address || '',
+  //     phone: formValues?.phone || '',
+  //     email: formValues?.email || '',
+  //     themeColor: formValues?.themeColor || '',
+  //   };
+  //   const payload: PersonalDetailsFormData = { data: payloadObj };
+  //   (async () => {
+  //     try {
+  //       await updateResumeDetail(params?.resumeId, payload);
+  //       setIsSaving(false);
+  //       onEnabledNext(true);
+  //       // Show a success notification here if needed
+  //     } catch (err) {
+  //       console.error('Error saving resume details:', err);
+  //       setIsSaving(false);
+  //     }
+  //   })();
+  // }, [formValues, isSaving, params.resumeId, onEnabledNext]);
 
   return (
     <div className="p-5 shadow-lg rounded-lg border-t-primary border-t-4">
@@ -77,18 +102,18 @@ function PersonalDetails({ onEnabledNext }: PersonalDetailsProps) {
           <Input
             label="First name"
             {...register('firstName', { required: 'First name is required' })}
-            errorMessage={errors.firstName?.message}
+            errorMessage={errors?.firstName?.message}
           />
           <Input
             label="Last name"
             {...register('lastName', { required: 'Last name is required' })}
-            errorMessage={errors.lastName?.message}
+            errorMessage={errors?.lastName?.message}
           />
           <div className="col-span-2">
             <Input
               label="Job Title"
               {...register('jobTitle', { required: 'Job Title is required' })}
-              errorMessage={errors.jobTitle?.message}
+              errorMessage={errors?.jobTitle?.message}
             />
           </div>
           <div className="col-span-2">
@@ -114,7 +139,7 @@ function PersonalDetails({ onEnabledNext }: PersonalDetailsProps) {
                 message: 'Invalid phone',
               },
             })}
-            errorMessage={errors.phone?.message}
+            errorMessage={errors?.phone?.message}
           />
           <Input
             label="Email"

@@ -11,3 +11,15 @@ interface NotificationType {
 interface NotificationContextType {
   addNotification: (notification: NotificationType) => void;
 }
+
+// Global State
+interface GlobalState {
+  data?: ResumeInfo;
+}
+
+interface Actions {
+  updateResumeInfo: (
+    state: GlobalState,
+    payload: { data: ResumeInfo }
+  ) => GlobalState;
+}

@@ -14,11 +14,7 @@ const axiosInstance = Axios.create({
   },
 });
 
-export const fetcher = async (
-  url: string,
-  method: 'GET' | 'POST',
-  data?: unknown
-) => {
+const fetcher = async (url: string, method: 'GET' | 'POST', data?: unknown) => {
   try {
     let response;
 
@@ -29,12 +25,20 @@ export const fetcher = async (
     }
 
     return response?.data;
-  } catch (error) {
-    if (error instanceof Error) {
-      throw new Error(error.message);
+  } catch (err) {
+    if (err instanceof Error) {
+      throw new Error(err.message);
     }
     throw new Error('An unknown error occurred');
   }
 };
 
-export default axiosInstance;
+const updateResumeDetail = (
+  id: string | undefined,
+  payload: PersonalDetailsFormData
+) => {
+  console.log(id, payload);
+  axiosInstance.put(`/user-resumes/${id}`, payload);
+};
+
+export { fetcher, updateResumeDetail };

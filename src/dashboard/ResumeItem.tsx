@@ -7,7 +7,7 @@ interface ResumeItemProps {
 
 function ResumeItem({ resume }: ResumeItemProps) {
   return (
-    <Link to={`/dashboard/resume/${resume.resumeId}/edit`}>
+    <Link to={`/dashboard/resume/${resume.documentId}/edit`}>
       <div className="p-14 bg-cod-gray-200 dark:bg-cod-gray-600 flex items-center justify-center h-[280px] border-primary rounded-lg hover:scale-105 transition-all hover:shadow-md hover:cursor-pointer">
         <BookText className="stroke-cod-gray-200" />
       </div>

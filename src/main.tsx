@@ -5,6 +5,7 @@ import App from './App.tsx';
 import { createBrowserRouter, RouterProvider } from 'react-router-dom';
 import { ClerkProvider } from '@clerk/clerk-react';
 import { NotificationProvider } from './lib/utils/providers';
+import { ErrorBoundary } from 'react-error-boundary';
 import SignInPage from './auth/SignInPage.tsx';
 import Home from './components/Home.tsx';
 import Dashboard from './dashboard/index.tsx';

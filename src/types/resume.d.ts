@@ -57,3 +57,22 @@ interface ResumeInfo {
   education?: Education[];
   skills?: Skill[];
 }
+
+interface ResumeState {
+  resumeInfo: ResumeInfo | null;
+}
+
+type PersonalDetails = Pick<
+  ResumeInfo,
+  | 'firstName'
+  | 'lastName'
+  | 'jobTitle'
+  | 'address'
+  | 'phone'
+  | 'email'
+  | 'themeColor'
+>;
+
+interface PersonalDetailsFormData {
+  data?: PersonalDetails;
+}
