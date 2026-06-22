@@ -1,0 +1,37 @@
+{
+  "name": "@ai-resume-magic/backend",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Strapi backend for AI Resume Magic",
+  "scripts": {
+    "build": "strapi build",
+    "deploy": "strapi deploy",
+    "develop": "strapi develop",
+    "start": "strapi start",
+    "strapi": "strapi"
+  },
+  "dependencies": {
+    "@strapi/plugin-cloud": "5.48.1",
+    "@strapi/plugin-users-permissions": "5.48.1",
+    "@strapi/strapi": "5.48.1",
+    "cheerio": "^1.2.0",
+    "mysql2": "3.22.5",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1",
+    "react-router-dom": "^6.28.0",
+    "styled-components": "^6.4.2"
+  },
+  "devDependencies": {
+    "@types/node": "^22.10.0",
+    "@types/react": "^18.3.12",
+    "@types/react-dom": "^18.3.1",
+    "typescript": "^6.0.3"
+  },
+  "engines": {
+    "node": ">=18.0.0 <=22.x.x",
+    "npm": ">=6.0.0"
+  },
+  "strapi": {
+    "uuid": "64382e77-f3f4-4fa5-99e6-8edc56a37994"
+  }
+}
