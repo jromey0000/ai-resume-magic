@@ -17,4 +17,5 @@ export default [
   'strapi::session',
   'strapi::favicon',
   'strapi::public',
+  'global::api-key-auth',
 ];

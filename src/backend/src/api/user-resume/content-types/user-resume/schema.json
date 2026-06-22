@@ -8,7 +8,7 @@
     "description": ""
   },
   "options": {
-    "draftAndPublish": true
+    "draftAndPublish": false
   },
   "pluginOptions": {},
   "attributes": {
@@ -45,6 +45,24 @@
     },
     "themeColor": {
       "type": "string"
+    },
+    "summary": {
+      "type": "text"
+    },
+    "experience": {
+      "type": "json"
+    },
+    "education": {
+      "type": "json"
+    },
+    "skills": {
+      "type": "json"
+    },
+    "templateId": {
+      "type": "string"
+    },
+    "atsScore": {
+      "type": "integer"
     }
   }
 }

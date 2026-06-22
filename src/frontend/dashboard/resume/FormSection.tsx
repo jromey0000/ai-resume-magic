@@ -6,26 +6,29 @@ import {
   Download,
   FileText,
   GraduationCap,
+  History,
   LayoutTemplate,
   Loader2,
   Sparkles,
   Target,
   User,
+  Wand2,
   Wrench,
 } from 'lucide-react';
 import { useCallback, useEffect, useState } from 'react';
 import { useFormContext } from 'react-hook-form';
+import { createMockResumeInfo } from '@/lib/utils/dev-fixtures';
 import { useParams, useSearchParams } from 'react-router-dom';
 import ATSScorePill from '@/components/ui/ATSScorePill';
 import AuthGateModal from '@/components/ui/AuthGateModal';
 import Button from '@/components/ui/Button';
 import { Card, CardContent } from '@/components/ui/card';
+import ExportModal from '@/components/ui/ExportModal';
 import { useEditorContext } from '@/lib/contexts/EditorContext';
 import { getGuestDraft, saveGuestDraft } from '@/lib/guest-resume';
 import { useDebounce } from '@/lib/hooks/debounce';
 import { cn } from '@/lib/utils';
 import { updateResumeDetail } from '@/lib/utils/api';
-import { exportResumeToPdf } from '@/lib/utils/export-pdf';
 import { useNotification } from '@/lib/utils/hooks';
 import Education from './forms/Education';
 import JobMatching from './forms/JobMatching';
@@ -34,6 +37,7 @@ import Skills from './forms/Skills';
 import Summary from './forms/Summary';
 import WorkExperience from './forms/WorkExperience';
 import TemplatePicker from './TemplatePicker';
+import VersionHistory from './VersionHistory';
 
 const SECTIONS = [
   { id: 'personal', name: 'Personal', icon: User, component: PersonalDetails, optional: false },
@@ -74,10 +78,11 @@ interface FormSectionProps {
 function FormSection({ onShowUpgrade, preview, mobileTab = 'edit' }: FormSectionProps) {
   const [currentStep, setCurrentStep] = useState(0);
   const [isSaving, setIsSaving] = useState(false);
-  const [isExporting, setIsExporting] = useState(false);
   const [lastSaved, setLastSaved] = useState<Date | null>(null);
   const [showAuthGate, setShowAuthGate] = useState(false);
   const [showTemplates, setShowTemplates] = useState(false);
+  const [showExportModal, setShowExportModal] = useState(false);
+  const [showVersionHistory, setShowVersionHistory] = useState(false);
   const [sectionCompletion, setSectionCompletion] = useState<SectionCompletionState>({
     personal: false,
     summary: false,
@@ -96,9 +101,15 @@ function FormSection({ onShowUpgrade, preview, mobileTab = 'edit' }: FormSection
   const { atsAnalysis, isAnalyzing, isGuestMode } = useEditorContext();
   const { addNotification } = useNotification();
 
-  const { watch } = useFormContext<ResumeInfo>();
+  const { watch, reset } = useFormContext<ResumeInfo>();
   const formValues = watch();
   const debouncedValues = useDebounce(formValues, 1500);
+
+  const handleDevAutoFill = () => {
+    const mockData = createMockResumeInfo();
+    reset(mockData);
+    addNotification({ title: 'Form filled', message: 'Sample resume data loaded.' });
+  };
 
   const checkSectionCompletion = useCallback(
     (values: ResumeInfo): SectionCompletionState => ({
@@ -148,13 +159,17 @@ function FormSection({ onShowUpgrade, preview, mobileTab = 'edit' }: FormSection
         }
       } catch (err) {
         console.error('Auto-save failed:', err);
+        addNotification({
+          title: 'Auto-save failed',
+          message: 'Your changes may not be saved. Please try again.',
+        });
       } finally {
         setIsSaving(false);
       }
     };
 
     saveData();
-  }, [debouncedValues, params?.resumeId, isGuestMode, atsAnalysis]);
+  }, [debouncedValues, params?.resumeId, isGuestMode, atsAnalysis, addNotification]);
 
   const completedCount = Object.values(sectionCompletion).filter(Boolean).length;
   const totalSections = SECTIONS.length - 1;
@@ -170,27 +185,12 @@ function FormSection({ onShowUpgrade, preview, mobileTab = 'edit' }: FormSection
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
-  const handleExport = async () => {
-    if (isGuestMode) {
-      setShowAuthGate(true);
-      return;
-    }
+  const handleExport = () => {
+    setShowExportModal(true);
+  };
 
-    setIsExporting(true);
-    try {
-      const name =
-        [formValues.firstName, formValues.lastName].filter(Boolean).join('_') || 'resume';
-      await exportResumeToPdf('resume-preview', `${name}-resume`);
-      addNotification({ title: 'Resume exported', message: 'Your PDF has been downloaded.' });
-    } catch (err) {
-      console.error('Export failed:', err);
-      addNotification({
-        title: 'Export failed',
-        message: 'Could not generate PDF. Please try again.',
-      });
-    } finally {
-      setIsExporting(false);
-    }
+  const handleExportSuccess = () => {
+    addNotification({ title: 'Resume exported', message: 'Your PDF has been downloaded.' });
   };
 
   return (
@@ -235,11 +235,33 @@ function FormSection({ onShowUpgrade, preview, mobileTab = 'edit' }: FormSection
             </div>
 
             <div className="flex items-center gap-2">
+              {import.meta.env.DEV && (
+                <Button
+                  variant="ghost"
+                  size="sm"
+                  className="flex items-center gap-1.5 text-amber-600 hover:text-amber-700 hover:bg-amber-50"
+                  onClick={handleDevAutoFill}
+                  title="Dev only: Fill form with sample data"
+                >
+                  <Wand2 className="w-4 h-4" />
+                  <span className="hidden sm:inline">Auto Fill</span>
+                </Button>
+              )}
+              <Button
+                variant="ghost"
+                size="sm"
+                className="flex items-center gap-1.5"
+                onClick={() => setShowVersionHistory(true)}
+              >
+                <History className="w-4 h-4" />
+                <span className="hidden sm:inline">History</span>
+              </Button>
               <Button
                 variant="ghost"
                 size="sm"
                 className="flex items-center gap-1.5"
                 onClick={() => setShowTemplates(true)}
+                aria-label="Template"
               >
                 <LayoutTemplate className="w-4 h-4" />
                 <span className="hidden sm:inline">Template</span>
@@ -249,13 +271,8 @@ function FormSection({ onShowUpgrade, preview, mobileTab = 'edit' }: FormSection
                 size="sm"
                 className="flex items-center gap-2"
                 onClick={handleExport}
-                disabled={isExporting}
               >
-                {isExporting ? (
-                  <Loader2 className="w-4 h-4 animate-spin" />
-                ) : (
-                  <Download className="w-4 h-4" />
-                )}
+                <Download className="w-4 h-4" />
                 Export PDF
               </Button>
             </div>
@@ -297,7 +314,7 @@ function FormSection({ onShowUpgrade, preview, mobileTab = 'edit' }: FormSection
             <div className="flex items-center gap-2 px-3 py-2 bg-amber-50 dark:bg-amber-950/30 border border-amber-200 dark:border-amber-800 rounded-lg text-sm">
               <Sparkles className="w-4 h-4 text-amber-600 dark:text-amber-400" />
               <span className="text-amber-800 dark:text-amber-200">
-                Guest mode — sign in to save and export
+                Guest mode — sign in to save your resume to the cloud
               </span>
             </div>
           )}
@@ -364,14 +381,8 @@ function FormSection({ onShowUpgrade, preview, mobileTab = 'edit' }: FormSection
                   Continue <ArrowRight className="w-4 h-4" />
                 </Button>
               ) : (
-                <Button variant="primary" onClick={handleExport} disabled={isExporting}>
-                  {isExporting ? (
-                    <Loader2 className="w-4 h-4 animate-spin" />
-                  ) : (
-                    <>
-                      <Download className="w-4 h-4 mr-2" /> Export PDF
-                    </>
-                  )}
+                <Button variant="primary" onClick={handleExport}>
+                  <Download className="w-4 h-4 mr-2" /> Export PDF
                 </Button>
               )}
             </div>
@@ -401,6 +412,18 @@ function FormSection({ onShowUpgrade, preview, mobileTab = 'edit' }: FormSection
         onClose={() => setShowAuthGate(false)}
         title="Sign in to export your resume"
         message="Create a free account to download your PDF and save your resume to the cloud."
+      />
+
+      <ExportModal
+        isOpen={showExportModal}
+        onClose={() => setShowExportModal(false)}
+        resumeInfo={formValues}
+        onSuccess={handleExportSuccess}
+      />
+
+      <VersionHistory
+        isOpen={showVersionHistory}
+        onClose={() => setShowVersionHistory(false)}
       />
     </div>
   );

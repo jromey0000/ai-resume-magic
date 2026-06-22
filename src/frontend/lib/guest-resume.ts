@@ -1,3 +1,5 @@
+import { DEFAULT_THEME_COLOR } from '@/lib/templates';
+
 const GUEST_DRAFT_KEY = 'ai-resume-magic-guest-draft';
 
 export interface GuestResumeDraft {
@@ -36,7 +38,7 @@ export function createGuestDraft(
   const draft: GuestResumeDraft = {
     title,
     resumeInfo: {
-      themeColor: '#cb37d8',
+      themeColor: DEFAULT_THEME_COLOR,
       templateId: 'classic',
       ...resumeInfo,
     },

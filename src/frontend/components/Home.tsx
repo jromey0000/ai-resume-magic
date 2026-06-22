@@ -3,13 +3,13 @@ import {
   Building2,
   Check,
   CheckCircle2,
+  Clock,
   Crown,
   Download,
   FileCheck,
   FileText,
   Shield,
   Sparkles,
-  Star,
   Target,
   TrendingUp,
   Upload,
@@ -58,30 +58,24 @@ const features = [
   },
 ];
 
-const testimonials = [
+const whyChooseUs = [
   {
-    name: 'Sarah M.',
-    role: 'Software Engineer',
-    company: 'Now at Google',
-    quote:
-      'After months of rejections, I used AI Resume Magic and landed 5 interviews in 2 weeks. The ATS optimization made all the difference.',
-    rating: 5,
+    icon: 'Shield',
+    title: 'Beat the 75% Rejection Rate',
+    description:
+      'Most resumes never reach human eyes — they get filtered by ATS software. Our AI ensures your resume passes these automated gatekeepers.',
   },
   {
-    name: 'James K.',
-    role: 'Marketing Manager',
-    company: 'Now at HubSpot',
-    quote:
-      'I had no idea my resume was getting filtered out by ATS systems. This tool showed me exactly what to fix.',
-    rating: 5,
+    icon: 'Clock',
+    title: 'Save Hours of Tailoring',
+    description:
+      'Stop manually rewriting your resume for every job. Paste a job description and get a perfectly tailored version in seconds.',
   },
   {
-    name: 'Emily R.',
-    role: 'Product Designer',
-    company: 'Now at Stripe',
-    quote:
-      'The job-matching feature is incredible. My resume now speaks directly to what hiring managers want to see.',
-    rating: 5,
+    icon: 'Target',
+    title: 'Data-Driven Optimization',
+    description:
+      'Our AI analyzes real job postings and successful resume patterns to give you actionable insights that actually work.',
   },
 ];
 
@@ -142,6 +136,16 @@ const howItWorksSteps = [
   },
 ];
 
+/**
+ * One-Time Pricing based on sustainable margins after service costs:
+ * - Clerk auth: $0.02/MAU
+ * - Stripe: 2.9% + $0.30
+ * - OpenAI: ~$0.05/optimization
+ * - Hosting: ~$16/mo
+ * 
+ * AI limits capped for sustainability (27-39% margin).
+ * See /lib/pricing-costs.ts for detailed breakdown.
+ */
 const pricingTiers = [
   {
     name: 'Free',
@@ -157,47 +161,47 @@ const pricingTiers = [
       { text: 'Basic ATS score', included: true },
       { text: 'ATS-friendly layout', included: true },
       { text: 'PDF export', included: true },
-      { text: 'Job matching', included: true },
+      { text: 'Job matching', included: false },
       { text: 'Multiple templates', included: false },
       { text: 'Priority support', included: false },
     ],
   },
   {
     name: 'Pro',
-    price: '$12',
-    period: '/month',
+    price: '$79',
+    period: 'one-time',
     description: 'For serious job seekers who want every advantage',
     icon: Crown,
     featured: true,
     cta: 'Go Pro',
     features: [
       { text: 'Unlimited resumes', included: true },
-      { text: 'Unlimited AI optimizations', included: true },
+      { text: '30 AI optimizations/month', included: true },
       { text: 'Advanced ATS scoring', included: true },
-      { text: 'Multiple templates', included: true },
-      { text: 'PDF export', included: true },
+      { text: '15 premium templates', included: true },
+      { text: 'PDF, DOCX & TXT export', included: true },
       { text: 'Job description matching', included: true },
-      { text: 'Resume duplication', included: true },
-      { text: 'Priority email support', included: false },
+      { text: 'Version history', included: true },
+      { text: 'Custom colors', included: true },
     ],
   },
   {
     name: 'Enterprise',
-    price: '$29',
-    period: '/month',
+    price: '$249',
+    period: 'one-time',
     description: 'For career coaches, recruiters & teams',
     icon: Building2,
     featured: false,
-    cta: 'Contact Sales',
+    cta: 'Go Enterprise',
     features: [
       { text: 'Everything in Pro', included: true },
+      { text: '100 AI optimizations/month', included: true },
       { text: 'Team management (5 seats)', included: true },
       { text: 'White-label exports', included: true },
-      { text: 'Custom branding', included: true },
       { text: 'API access', included: true },
       { text: 'Bulk resume processing', included: true },
       { text: 'Analytics dashboard', included: true },
-      { text: 'Dedicated account manager', included: true },
+      { text: 'Priority support', included: true },
     ],
   },
 ];
@@ -297,8 +301,8 @@ function Home() {
         {/* Problem/Solution Section */}
         <section className="container mx-auto px-4 py-20">
           <div className="max-w-6xl mx-auto">
-            <div className="grid md:grid-cols-2 gap-12 items-center">
-              <Card className="bg-gradient-to-br from-coral-rose-100 to-white dark:from-coral-rose-950/30 dark:to-card border-coral-rose-200 dark:border-coral-rose-900/30">
+            <div className="grid md:grid-cols-2 gap-12 items-stretch">
+              <Card className="h-full bg-gradient-to-br from-coral-rose-100 to-white dark:from-coral-rose-950/30 dark:to-card border-coral-rose-200 dark:border-coral-rose-900/30">
                 <CardHeader>
                   <Badge
                     variant="outline"
@@ -319,7 +323,7 @@ function Home() {
                       "You never know why you didn't hear back",
                     ].map((item) => (
                       <li key={item} className="flex items-start gap-3 text-muted-foreground">
-                        <span className="text-coral-rose-500 dark:text-coral-rose-400 mt-1">✕</span>
+                        <X className="w-5 h-5 text-coral-rose-500 dark:text-coral-rose-400 mt-0.5 flex-shrink-0" />
                         {item}
                       </li>
                     ))}
@@ -327,7 +331,7 @@ function Home() {
                 </CardContent>
               </Card>
 
-              <Card className="bg-gradient-to-br from-fuchsia-pink-100 to-white dark:from-fuchsia-pink-950/30 dark:to-card border-fuchsia-pink-200 dark:border-fuchsia-pink-700/30">
+              <Card className="h-full bg-gradient-to-br from-fuchsia-pink-100 to-white dark:from-fuchsia-pink-950/30 dark:to-card border-fuchsia-pink-200 dark:border-fuchsia-pink-700/30">
                 <CardHeader>
                   <Badge
                     variant="outline"
@@ -655,13 +659,15 @@ function Home() {
                     </div>
                     <div className="mb-2">
                       <span className="text-4xl font-bold">{tier.price}</span>
-                      <span className="text-muted-foreground">{tier.period}</span>
+                      {tier.period !== 'forever' && (
+                        <span className="text-muted-foreground ml-1">{tier.period}</span>
+                      )}
                     </div>
                     <CardDescription>{tier.description}</CardDescription>
                   </CardHeader>
 
                   <CardContent>
-                    <Link to="/dashboard">
+                    <Link to="/dashboard/new">
                       <Button
                         variant={tier.featured ? 'primary' : 'ghost'}
                         size="lg"
@@ -696,46 +702,64 @@ function Home() {
 
             <div className="mt-12 text-center">
               <p className="text-muted-foreground">
-                All plans include a 7-day money-back guarantee. No questions asked.
+                One-time payment, lifetime access. 14-day money-back guarantee.
               </p>
             </div>
           </div>
         </section>
 
-        {/* Testimonials */}
+        {/* Why Choose Us */}
         <section className="container mx-auto px-4 py-20">
           <div className="max-w-6xl mx-auto">
             <div className="text-center mb-16">
               <h2 className="text-3xl md:text-5xl font-bold mb-6">
-                Join Thousands Who{' '}
+                Why{' '}
                 <span className="bg-gradient-to-r from-secondary to-fuchsia-pink-400 text-transparent bg-clip-text">
-                  Landed Their Dream Job
+                  AI Resume Magic
                 </span>
+                ?
               </h2>
+              <p className="text-xl text-muted-foreground max-w-2xl mx-auto">
+                The job market is competitive. Give yourself every advantage with tools designed to
+                get your resume seen by the right people.
+              </p>
             </div>
 
             <div className="grid md:grid-cols-3 gap-8">
-              {testimonials.map((testimonial) => (
-                <Card key={testimonial.name}>
-                  <CardContent className="pt-6">
-                    <div className="flex gap-1 mb-4">
-                      {[1, 2, 3, 4, 5].slice(0, testimonial.rating).map((star) => (
-                        <Star key={star} className="w-5 h-5 fill-amber-400 text-amber-400" />
-                      ))}
-                    </div>
-                    <p className="text-muted-foreground mb-6 leading-relaxed">
-                      "{testimonial.quote}"
-                    </p>
-                    <div>
-                      <div className="font-semibold">{testimonial.name}</div>
-                      <div className="text-sm text-muted-foreground">{testimonial.role}</div>
-                      <div className="text-sm text-fuchsia-pink-600 dark:text-fuchsia-pink-400">
-                        {testimonial.company}
+              {whyChooseUs.map((item) => {
+                const IconComponent =
+                  item.icon === 'Shield' ? Shield : item.icon === 'Clock' ? Clock : Target;
+                return (
+                  <Card
+                    key={item.title}
+                    className="relative overflow-hidden border-2 hover:border-fuchsia-pink-500/50 transition-colors"
+                  >
+                    <CardContent className="pt-8 pb-8">
+                      <div className="w-14 h-14 rounded-2xl bg-gradient-to-br from-fuchsia-pink-500/20 to-primary/20 flex items-center justify-center mb-6">
+                        <IconComponent className="w-7 h-7 text-fuchsia-pink-600 dark:text-fuchsia-pink-400" />
                       </div>
-                    </div>
-                  </CardContent>
-                </Card>
-              ))}
+                      <h3 className="text-xl font-bold mb-3">{item.title}</h3>
+                      <p className="text-muted-foreground leading-relaxed">{item.description}</p>
+                    </CardContent>
+                  </Card>
+                );
+              })}
+            </div>
+
+            <div className="mt-12 text-center">
+              <Card className="inline-block bg-gradient-to-r from-cod-gray-50 to-cod-gray-100 dark:from-cod-gray-900 dark:to-cod-gray-800 border-2 border-fuchsia-pink-500/20">
+                <CardContent className="py-6 px-8">
+                  <p className="text-lg font-medium">
+                    <span className="text-fuchsia-pink-600 dark:text-fuchsia-pink-400">
+                      Free to start
+                    </span>{' '}
+                    — build your first resume at no cost.{' '}
+                    <span className="text-muted-foreground">
+                      Upgrade to unlock premium templates, job matching, and DOCX export.
+                    </span>
+                  </p>
+                </CardContent>
+              </Card>
             </div>
           </div>
         </section>
@@ -774,14 +798,32 @@ function Home() {
         {/* Footer */}
         <footer className="border-t border-border py-12">
           <div className="container mx-auto px-4">
-            <div className="flex flex-col md:flex-row justify-between items-center gap-6">
-              <div className="flex items-center gap-2">
-                <WandSparkles className="w-6 h-6 text-fuchsia-pink-600 dark:text-fuchsia-pink-400" />
-                <span className="font-bold text-xl">AI Resume Magic</span>
+            <div className="flex flex-col gap-8">
+              <div className="flex flex-col md:flex-row justify-between items-center gap-6">
+                <div className="flex items-center gap-2">
+                  <WandSparkles className="w-6 h-6 text-fuchsia-pink-600 dark:text-fuchsia-pink-400" />
+                  <span className="font-bold text-xl">AI Resume Magic</span>
+                </div>
+                <nav className="flex flex-wrap justify-center gap-6 text-sm">
+                  <Link to="/legal" className="text-muted-foreground hover:text-foreground transition-colors">
+                    Terms of Service
+                  </Link>
+                  <Link to="/legal#privacy" className="text-muted-foreground hover:text-foreground transition-colors">
+                    Privacy Policy
+                  </Link>
+                  <Link to="/legal#refunds" className="text-muted-foreground hover:text-foreground transition-colors">
+                    Refund Policy
+                  </Link>
+                  <a href="#pricing" className="text-muted-foreground hover:text-foreground transition-colors">
+                    Pricing
+                  </a>
+                </nav>
               </div>
-              <p className="text-muted-foreground text-sm">
-                © 2026 AI Resume Magic. Built to help you land your dream job.
-              </p>
+              <div className="text-center">
+                <p className="text-muted-foreground text-sm">
+                  © 2026 Louis Interactive LLC. All rights reserved.
+                </p>
+              </div>
             </div>
           </div>
         </footer>

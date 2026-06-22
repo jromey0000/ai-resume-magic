@@ -1,4 +1,5 @@
 import {
+  AlertTriangle,
   BarChart3,
   Building2,
   ChevronRight,
@@ -7,9 +8,11 @@ import {
   HelpCircle,
   Lock,
   Settings,
+  Shield,
   Sparkles,
   TrendingUp,
   Users,
+  X,
 } from 'lucide-react';
 import { Link, useLocation } from 'react-router-dom';
 import Button from '@/components/ui/Button';
@@ -93,7 +96,7 @@ function UsageBar({
 
 export default function DashboardSidebar({ onUpgradeClick }: { onUpgradeClick?: () => void }) {
   const tierContext = useTier();
-  const { tier, canCreateResume } = tierContext;
+  const { tier, canCreateResume, warnings, dismissWarning } = tierContext;
   const { resumesCreated, aiOptimizationsUsed, teamMembersCount } = tierContext.usage;
   const location = useLocation();
 
@@ -160,6 +163,15 @@ export default function DashboardSidebar({ onUpgradeClick }: { onUpgradeClick?: 
             </div>
           </div>
         </div>
+
+        {tier.limits.hasPrioritySupport && (
+          <div className="mt-3 flex items-center gap-2 px-3 py-2 rounded-lg bg-violet-100 dark:bg-violet-950/50 border border-violet-200 dark:border-violet-800/30">
+            <Shield className="w-4 h-4 text-violet-600 dark:text-violet-400" />
+            <span className="text-sm font-medium text-violet-700 dark:text-violet-300">
+              Priority Support Active
+            </span>
+          </div>
+        )}
       </div>
 
       {/* Usage Stats */}
@@ -193,11 +205,61 @@ export default function DashboardSidebar({ onUpgradeClick }: { onUpgradeClick?: 
           />
         )}
 
-        {!canCreateResume && tier.name === 'free' && (
-          <div className="p-3 rounded-lg bg-amber-50 dark:bg-amber-950/30 border border-amber-200 dark:border-amber-800/30">
-            <p className="text-xs text-amber-700 dark:text-amber-300">
-              You've reached your resume limit. Upgrade to create more.
-            </p>
+        {/* Usage Warnings */}
+        {warnings.length > 0 && (
+          <div className="space-y-2 pt-2">
+            {warnings.map((warning) => (
+              <div
+                key={warning.type}
+                className={`p-3 rounded-lg border relative ${
+                  warning.severity === 'over_limit'
+                    ? 'bg-red-50 dark:bg-red-950/30 border-red-200 dark:border-red-800/30'
+                    : warning.severity === 'critical'
+                      ? 'bg-amber-50 dark:bg-amber-950/30 border-amber-200 dark:border-amber-800/30'
+                      : 'bg-blue-50 dark:bg-blue-950/30 border-blue-200 dark:border-blue-800/30'
+                }`}
+              >
+                <button
+                  type="button"
+                  onClick={() => dismissWarning(warning.type)}
+                  className="absolute top-2 right-2 p-0.5 rounded hover:bg-black/10 transition-colors"
+                  aria-label="Dismiss warning"
+                >
+                  <X className="w-3 h-3 text-current opacity-50" />
+                </button>
+                <div className="flex items-start gap-2 pr-4">
+                  <AlertTriangle
+                    className={`w-4 h-4 mt-0.5 shrink-0 ${
+                      warning.severity === 'over_limit'
+                        ? 'text-red-600 dark:text-red-400'
+                        : warning.severity === 'critical'
+                          ? 'text-amber-600 dark:text-amber-400'
+                          : 'text-blue-600 dark:text-blue-400'
+                    }`}
+                  />
+                  <p
+                    className={`text-xs ${
+                      warning.severity === 'over_limit'
+                        ? 'text-red-700 dark:text-red-300'
+                        : warning.severity === 'critical'
+                          ? 'text-amber-700 dark:text-amber-300'
+                          : 'text-blue-700 dark:text-blue-300'
+                    }`}
+                  >
+                    {warning.message}
+                  </p>
+                </div>
+                {warning.severity !== 'warning' && tier.name === 'free' && (
+                  <button
+                    type="button"
+                    onClick={onUpgradeClick}
+                    className="mt-2 text-xs font-medium text-primary hover:underline"
+                  >
+                    Upgrade now →
+                  </button>
+                )}
+              </div>
+            ))}
           </div>
         )}
       </div>

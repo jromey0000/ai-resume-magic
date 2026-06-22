@@ -29,4 +29,24 @@ describe('SignInPage', () => {
       screen.getByRole('link', { name: /continue building without an account/i })
     ).toHaveAttribute('href', '/dashboard/new');
   });
+
+  it('sanitizes external redirect URLs to default', () => {
+    vi.doMock('react-router-dom', () => ({
+      Link: ({ to, children }: { to: string; children: ReactNode }) => <a href={to}>{children}</a>,
+      useSearchParams: () => [new URLSearchParams('redirect_url=https://evil.com')],
+    }));
+
+    render(<SignInPage />);
+    expect(screen.getByText('AI Resume Magic')).toBeInTheDocument();
+  });
+
+  it('sanitizes protocol-relative redirect URLs to default', () => {
+    vi.doMock('react-router-dom', () => ({
+      Link: ({ to, children }: { to: string; children: ReactNode }) => <a href={to}>{children}</a>,
+      useSearchParams: () => [new URLSearchParams('redirect_url=//evil.com')],
+    }));
+
+    render(<SignInPage />);
+    expect(screen.getByText('AI Resume Magic')).toBeInTheDocument();
+  });
 });

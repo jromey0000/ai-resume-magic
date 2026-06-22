@@ -1,3 +1,5 @@
+import { DEFAULT_THEME_COLOR } from '@/lib/templates';
+
 export default {
   firstName: 'John',
   lastName: 'Doe',
@@ -5,7 +7,7 @@ export default {
   address: '1234 Elm St.',
   phone: '123-456-7890',
   email: 'example@gmail.com',
-  themeColor: '#cb37d8',
+  themeColor: DEFAULT_THEME_COLOR,
   summary:
     'A software engineer with a passion for developing innovative programs that expedite the efficiency and effectiveness of organizational success.',
   experience: [

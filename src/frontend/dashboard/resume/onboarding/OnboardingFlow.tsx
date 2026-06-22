@@ -4,6 +4,7 @@ import {
   ArrowRight,
   Briefcase,
   CheckCircle2,
+  Crown,
   FileText,
   Loader2,
   Sparkles,
@@ -14,8 +15,9 @@ import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { v4 as uuidv4 } from 'uuid';
 import Button from '@/components/ui/Button';
+import { useTier } from '@/lib/contexts/TierContext';
 import { createGuestDraft } from '@/lib/guest-resume';
-import { useCreateNewResume } from '@/lib/hooks/resume';
+import { useCreateNewResume, useGetUserResumes } from '@/lib/hooks/resume';
 import { convertParsedToResumeInfo, parseResume } from '@/lib/services/resume-parser';
 import { useNotification } from '@/lib/utils/hooks';
 import JobDescriptionStart from './JobDescriptionStart';
@@ -58,13 +60,26 @@ function OnboardingFlow({ onComplete }: OnboardingFlowProps) {
   const [jobDescription, setJobDescription] = useState('');
   const [jobTitle, setJobTitle] = useState('');
   const [isCreating, setIsCreating] = useState(false);
+  const [showUpgradePrompt, setShowUpgradePrompt] = useState(false);
 
   const navigate = useNavigate();
-  const { user, isSignedIn } = useUser();
+  const { user, isSignedIn, isLoaded } = useUser();
   const { createNewResume } = useCreateNewResume();
   const { addNotification } = useNotification();
+  const { tier, updateUsage } = useTier();
+  const userEmail = user?.primaryEmailAddress?.emailAddress;
+  const { data: existingResumes } = useGetUserResumes(isSignedIn ? userEmail : undefined);
+
+  const resumeCount = existingResumes?.length ?? 0;
+  const maxResumes = tier.limits.maxResumes;
+  const canCreateResume = maxResumes === Infinity || resumeCount < maxResumes;
 
   const handleOptionSelect = (optionId: string) => {
+    if (isSignedIn && !canCreateResume) {
+      setShowUpgradePrompt(true);
+      return;
+    }
+
     if (optionId === 'job-first') {
       setCurrentStep('job-first');
     } else if (optionId === 'upload') {
@@ -113,6 +128,7 @@ function OnboardingFlow({ onComplete }: OnboardingFlowProps) {
       const response = await createNewResume(data);
       const documentId = response?.data?.documentId;
       if (documentId) {
+        updateUsage({ resumesCreated: resumeCount + 1 });
         addNotification({
           title: 'Resume created!',
           message: "Let's build something great.",
@@ -151,6 +167,56 @@ function OnboardingFlow({ onComplete }: OnboardingFlowProps) {
       : 'Imported Resume';
     createResumeAndNavigate(title, parsedData);
   };
+
+  if (showUpgradePrompt) {
+    return (
+      <div className="min-h-[calc(100vh-80px)] flex items-center justify-center p-6">
+        <div className="max-w-md w-full text-center">
+          <div className="w-20 h-20 rounded-2xl bg-gradient-to-br from-amber-100 to-amber-200 dark:from-amber-900/30 dark:to-amber-800/30 flex items-center justify-center mx-auto mb-6">
+            <Crown className="w-10 h-10 text-amber-600 dark:text-amber-400" />
+          </div>
+          <h2 className="text-3xl font-bold mb-3">Resume Limit Reached</h2>
+          <p className="text-gray-600 dark:text-gray-400 mb-2">
+            You've created {resumeCount} of {maxResumes} resume{maxResumes === 1 ? '' : 's'} on the{' '}
+            <span className="font-medium">{tier.displayName}</span> plan.
+          </p>
+          <p className="text-gray-500 dark:text-gray-500 text-sm mb-8">
+            Upgrade to Pro for unlimited resumes, advanced ATS optimization, and more templates.
+          </p>
+
+          <div className="space-y-3">
+            <Button
+              variant="primary"
+              size="lg"
+              className="w-full"
+              onClick={() => navigate('/dashboard/settings')}
+            >
+              <Crown className="w-5 h-5 mr-2" />
+              Upgrade to Pro
+            </Button>
+            <Button
+              variant="ghost"
+              size="lg"
+              className="w-full"
+              onClick={() => {
+                setShowUpgradePrompt(false);
+                navigate('/dashboard');
+              }}
+            >
+              Back to My Resumes
+            </Button>
+          </div>
+
+          <div className="mt-8 p-4 bg-primary/5 rounded-xl border border-primary/20">
+            <p className="text-sm text-gray-600 dark:text-gray-400">
+              <span className="font-semibold text-primary">Pro tip:</span> You can edit or duplicate
+              your existing resume instead of creating a new one.
+            </p>
+          </div>
+        </div>
+      </div>
+    );
+  }
 
   if (currentStep === 'job-first') {
     return (
@@ -207,6 +273,13 @@ function OnboardingFlow({ onComplete }: OnboardingFlowProps) {
             <button
               type="button"
               key={option.id}
+              aria-label={
+                option.id === 'fresh'
+                  ? 'Start from scratch — build your resume from a blank canvas'
+                  : option.id === 'upload'
+                    ? 'Upload existing resume'
+                    : 'Start with a job posting — paste a job description'
+              }
               onClick={() => handleOptionSelect(option.id)}
               className="group relative bg-white dark:bg-cod-gray-900 rounded-2xl p-6 border-2 border-gray-200 dark:border-cod-gray-700 hover:border-primary dark:hover:border-primary transition-all duration-300 text-left hover:shadow-lg hover:shadow-primary/10"
             >
@@ -247,7 +320,7 @@ function OnboardingFlow({ onComplete }: OnboardingFlowProps) {
         </div>
 
         <p className="text-center text-sm text-gray-500 dark:text-gray-400 mt-8">
-          All options include AI assistance, ATS optimization, and unlimited exports
+          All options include AI assistance, ATS optimization, and PDF export
         </p>
       </div>
     </div>

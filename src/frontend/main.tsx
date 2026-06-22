@@ -13,6 +13,7 @@ import config from '@/config';
 import App from './App.tsx';
 import SignInPage from './auth/SignInPage.tsx';
 import Home from './components/Home.tsx';
+import LegalPage from './components/LegalPage.tsx';
 import AnalyticsPage from './dashboard/AnalyticsPage.tsx';
 import DashboardLayout from './dashboard/components/DashboardLayout';
 import HelpPage from './dashboard/HelpPage.tsx';
@@ -70,6 +71,22 @@ function RouteErrorBoundary() {
 
 const router = createBrowserRouter([
   {
+    path: '/',
+    element: <Home />,
+    errorElement: <RouteErrorBoundary />,
+  },
+  {
+    path: '/legal',
+    element: <LegalPage />,
+    errorElement: <RouteErrorBoundary />,
+  },
+  {
+    path: '/auth/sign-in',
+    element: <SignInPage />,
+    errorElement: <RouteErrorBoundary />,
+  },
+  {
+    path: '/dashboard',
     element: <App />,
     errorElement: <RouteErrorBoundary />,
     children: [
@@ -77,46 +94,36 @@ const router = createBrowserRouter([
         element: <DashboardLayout />,
         children: [
           {
-            path: '/dashboard',
+            index: true,
             element: <Dashboard />,
           },
           {
-            path: '/dashboard/analytics',
+            path: 'analytics',
             element: <AnalyticsPage />,
           },
           {
-            path: '/dashboard/team',
+            path: 'team',
             element: <TeamPage />,
           },
           {
-            path: '/dashboard/settings',
+            path: 'settings',
             element: <SettingsPage />,
           },
           {
-            path: '/dashboard/help',
+            path: 'help',
             element: <HelpPage />,
           },
           {
-            path: '/dashboard/new',
+            path: 'new',
             element: <OnboardingFlow />,
           },
           {
-            path: '/dashboard/resume/:resumeId/edit',
+            path: 'resume/:resumeId/edit',
             element: <EditResume />,
           },
         ],
       },
     ],
-  },
-  {
-    path: '/',
-    element: <Home />,
-    errorElement: <RouteErrorBoundary />,
-  },
-  {
-    path: '/auth/sign-in',
-    element: <SignInPage />,
-    errorElement: <RouteErrorBoundary />,
   },
   {
     path: '*',

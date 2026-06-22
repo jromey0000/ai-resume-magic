@@ -10,8 +10,10 @@ import { EditorProvider } from '@/lib/contexts/EditorContext';
 import { clearGuestDraft, getGuestDraft } from '@/lib/guest-resume';
 import { useCreateNewResume, useGetUserResume } from '@/lib/hooks/resume';
 import { cn } from '@/lib/utils';
+import { DEFAULT_THEME_COLOR } from '@/lib/templates';
+import { useNotification } from '@/lib/utils/hooks';
 import FormSection from '../../FormSection';
-import ResumePreview from '../../ResumePreview';
+import ResumePreviewContainer from '../../ResumePreviewContainer';
 
 type MobileTab = 'edit' | 'preview';
 
@@ -27,6 +29,7 @@ function EditResume() {
   const [searchParams] = useSearchParams();
   const navigate = useNavigate();
   const { user, isSignedIn } = useUser();
+  const { addNotification } = useNotification();
   const isGuest = params?.resumeId === 'guest';
 
   const jobDescriptionParam = searchParams.get('jd')
@@ -42,7 +45,7 @@ function EditResume() {
   const { createNewResume } = useCreateNewResume();
 
   const methods = useForm<ResumeInfo>({
-    defaultValues: resumeInfo || { themeColor: '#cb37d8', templateId: 'classic' },
+    defaultValues: resumeInfo || { themeColor: DEFAULT_THEME_COLOR, templateId: 'classic' },
     mode: 'onChange',
   });
 
@@ -51,12 +54,12 @@ function EditResume() {
       const draft = getGuestDraft();
       if (draft) {
         setResumeInfo({
-          themeColor: '#cb37d8',
+          themeColor: DEFAULT_THEME_COLOR,
           templateId: 'classic',
           ...draft.resumeInfo,
         });
       } else {
-        setResumeInfo({ themeColor: '#cb37d8', templateId: 'classic' });
+        setResumeInfo({ themeColor: DEFAULT_THEME_COLOR, templateId: 'classic' });
       }
       setGuestLoaded(true);
     }
@@ -65,7 +68,7 @@ function EditResume() {
   useEffect(() => {
     if (!isGuest && data && !isLoading && !error) {
       setResumeInfo({
-        themeColor: '#cb37d8',
+        themeColor: DEFAULT_THEME_COLOR,
         templateId: 'classic',
         ...data,
       });
@@ -106,6 +109,11 @@ function EditResume() {
       }
     } catch (err) {
       console.error('Failed to migrate guest resume:', err);
+      addNotification({
+        title: 'Failed to save resume',
+        message: 'Your work is saved locally. Please try signing in again or continue as a guest.',
+      });
+      migrationAttempted.current = false;
     } finally {
       setIsMigrating(false);
     }
@@ -208,7 +216,7 @@ function EditResume() {
 
           <FormSection
             onShowUpgrade={() => setShowUpgrade(true)}
-            preview={<ResumePreview />}
+            preview={<ResumePreviewContainer />}
             mobileTab={mobileTab}
           />
         </div>

@@ -449,14 +449,17 @@ export interface ApiUserResumeUserResume extends Struct.CollectionTypeSchema {
     singularName: 'user-resume';
   };
   options: {
-    draftAndPublish: true;
+    draftAndPublish: false;
   };
   attributes: {
     address: Schema.Attribute.String;
+    atsScore: Schema.Attribute.Integer;
     createdAt: Schema.Attribute.DateTime;
     createdBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
       Schema.Attribute.Private;
+    education: Schema.Attribute.JSON;
     email: Schema.Attribute.String;
+    experience: Schema.Attribute.JSON;
     firstName: Schema.Attribute.String;
     jobTitle: Schema.Attribute.String;
     lastName: Schema.Attribute.String;
@@ -469,6 +472,9 @@ export interface ApiUserResumeUserResume extends Struct.CollectionTypeSchema {
     phone: Schema.Attribute.String;
     publishedAt: Schema.Attribute.DateTime;
     resumeId: Schema.Attribute.String;
+    skills: Schema.Attribute.JSON;
+    summary: Schema.Attribute.Text;
+    templateId: Schema.Attribute.String;
     themeColor: Schema.Attribute.String;
     title: Schema.Attribute.String & Schema.Attribute.Required;
     updatedAt: Schema.Attribute.DateTime;

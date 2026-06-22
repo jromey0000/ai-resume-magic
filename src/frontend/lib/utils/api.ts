@@ -1,7 +1,7 @@
-import Axios from 'axios';
+import Axios, { AxiosError } from 'axios';
 import config from '@/config';
 
-const _API_KEY = config.STRAPI_API_KEY;
+const API_KEY = config.STRAPI_API_KEY;
 const API_BASE_URL = config.API_BASE_URL;
 
 const axiosInstance = Axios.create({
@@ -10,8 +10,21 @@ const axiosInstance = Axios.create({
   headers: {
     Accept: 'application/json, text/plain, */*',
     'Content-Type': 'application/json; charset=utf-8',
+    ...(API_KEY && { Authorization: `Bearer ${API_KEY}` }),
   },
 });
+
+interface ApiError extends Error {
+  status?: number;
+  code?: string;
+}
+
+function createApiError(message: string, status?: number, code?: string): ApiError {
+  const error = new Error(message) as ApiError;
+  error.status = status;
+  error.code = code;
+  return error;
+}
 
 const fetcher = async (
   url: string,
@@ -37,14 +50,20 @@ const fetcher = async (
 
     return response?.data;
   } catch (err) {
-    if (err instanceof Error) {
-      throw new Error(err.message);
+    if (err instanceof AxiosError) {
+      const status = err.response?.status;
+      const data = err.response?.data as { error?: { message?: string } } | undefined;
+      const message = data?.error?.message || err.message;
+      throw createApiError(message, status, err.code);
     }
-    throw new Error('An unknown error occurred');
+    if (err instanceof Error) {
+      throw createApiError(err.message);
+    }
+    throw createApiError('An unknown error occurred');
   }
 };
 
-const updateResumeDetail = (
+const updateResumeDetail = async (
   id: string | undefined,
   payload:
     | PersonalDetailsFormData
@@ -53,9 +72,12 @@ const updateResumeDetail = (
     | EducationFormData
     | SkillsFormData
     | { data?: Partial<ResumeInfo> }
-) => {
-  console.log(id, payload);
-  axiosInstance.put(`/user-resumes/${id}`, payload);
+): Promise<void> => {
+  if (!id) {
+    throw createApiError('Resume ID is required', 400, 'MISSING_ID');
+  }
+  await axiosInstance.put(`/user-resumes/${id}`, payload);
 };
 
-export { fetcher, updateResumeDetail };
+export { fetcher, updateResumeDetail, createApiError };
+export type { ApiError };

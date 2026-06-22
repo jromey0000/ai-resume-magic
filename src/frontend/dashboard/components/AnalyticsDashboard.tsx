@@ -2,6 +2,7 @@ import {
   ArrowDownRight,
   ArrowUpRight,
   BarChart3,
+  Building2,
   Calendar,
   FileText,
   Target,
@@ -9,6 +10,8 @@ import {
   Users,
   Zap,
 } from 'lucide-react';
+import { Link } from 'react-router-dom';
+import Button from '@/components/ui/Button';
 import { useTier } from '@/lib/contexts/TierContext';
 
 interface StatCard {
@@ -114,10 +117,16 @@ export default function AnalyticsDashboard() {
         <h3 className="text-xl font-semibold text-cod-gray-900 dark:text-white mb-2">
           Analytics Dashboard
         </h3>
-        <p className="text-cod-gray-500 dark:text-cod-gray-400 max-w-md">
+        <p className="text-cod-gray-500 dark:text-cod-gray-400 max-w-md mb-6">
           Upgrade to Enterprise to access detailed analytics about your team's resume performance
           and activity.
         </p>
+        <Link to="/dashboard/settings">
+          <Button variant="primary">
+            <Building2 className="w-4 h-4 mr-2" />
+            Upgrade to Enterprise
+          </Button>
+        </Link>
       </div>
     );
   }

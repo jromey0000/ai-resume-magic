@@ -29,7 +29,7 @@ function Header() {
   ];
 
   return (
-    <div className="shadow-lg bg-white/80 dark:bg-transparent border-b border-cod-gray-200 dark:border-cod-gray-700/50 backdrop-blur-sm">
+    <div className="sticky top-0 z-50 shadow-lg bg-white/80 dark:bg-transparent border-b border-cod-gray-200 dark:border-cod-gray-700/50 backdrop-blur-sm">
       <div className="px-10 md:px-15 lg:px-20 py-4 flex items-center justify-between">
         <Link to={'/'}>
           <img src="/ai-resume-magic.svg" alt="AI Resume Magic" style={{ height: '35px' }} />
@@ -97,14 +97,21 @@ function Header() {
             )}
           </div>
 
-          {isSignedIn && isLoaded ? (
+          {!isLoaded ? (
+            <div className="ml-2 w-8 h-8 rounded-full bg-muted animate-pulse" />
+          ) : isSignedIn ? (
             <div className="ml-2">
               <UserButton appearance={{ baseTheme: resolvedTheme === 'dark' ? dark : undefined }} />
             </div>
           ) : (
-            <Link to={'/auth/sign-in'}>
-              <Button>Get Started</Button>
-            </Link>
+            <>
+              <Link to="/auth/sign-in">
+                <Button variant="ghost">Sign In</Button>
+              </Link>
+              <Link to="/dashboard/new">
+                <Button>Get Started</Button>
+              </Link>
+            </>
           )}
         </div>
       </div>

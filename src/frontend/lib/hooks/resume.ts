@@ -10,6 +10,10 @@ export const useCreateNewResume = () => {
     try {
       const response = await fetcher('/user-resumes', 'POST', resumeData);
       mutate('/user-resumes', response, false);
+      const userEmail = resumeData.data.userEmail;
+      if (userEmail) {
+        mutate(`/user-resumes?filters[userEmail][$eq]=${userEmail}`);
+      }
       return response;
     } catch (err) {
       console.error('Failed to create resume:', err);
@@ -34,6 +38,33 @@ export const useDeleteResume = () => {
   };
 
   return { deleteResume };
+};
+
+export const useBulkDeleteResumes = () => {
+  const bulkDeleteResumes = async (documentIds: string[], userEmail: string) => {
+    const results: { id: string; success: boolean; error?: Error }[] = [];
+
+    await Promise.all(
+      documentIds.map(async (documentId) => {
+        try {
+          await fetcher(`/user-resumes/${documentId}`, 'DELETE');
+          results.push({ id: documentId, success: true });
+        } catch (err) {
+          results.push({ id: documentId, success: false, error: err as Error });
+        }
+      })
+    );
+
+    const cacheKey = `/user-resumes?filters[userEmail][$eq]=${userEmail}`;
+    mutate(cacheKey);
+
+    const successCount = results.filter((r) => r.success).length;
+    const failureCount = results.filter((r) => !r.success).length;
+
+    return { results, successCount, failureCount };
+  };
+
+  return { bulkDeleteResumes };
 };
 
 export const useDuplicateResume = () => {
@@ -78,15 +109,15 @@ export const useDuplicateResume = () => {
   return { duplicateResume };
 };
 
-export const useGetUserResumes = (userEmail: string) => {
-  const dataKey = `/user-resumes?filters[userEmail][$eq]=${userEmail}`;
-  const getFetcher = () => fetcher(dataKey, 'GET');
+export const useGetUserResumes = (userEmail: string | undefined) => {
+  const dataKey = userEmail ? `/user-resumes?filters[userEmail][$eq]=${userEmail}` : null;
+  const getFetcher = dataKey ? () => fetcher(dataKey, 'GET') : null;
   const { data, error, isLoading, mutate } = useSWR(dataKey, getFetcher);
 
   return {
     data: data?.data || [],
     error,
-    isLoading,
+    isLoading: userEmail ? isLoading : false,
     mutate,
   };
 };

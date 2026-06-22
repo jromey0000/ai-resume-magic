@@ -1,5 +1,8 @@
 import type { TierName } from '@/lib/contexts/TierContext';
 
+/** Default accent color — first free-tier color so new/guest users aren't locked to Pro purple */
+export const DEFAULT_THEME_COLOR = '#2563eb';
+
 export interface ResumeTemplate {
   id: string;
   name: string;
@@ -8,7 +11,14 @@ export interface ResumeTemplate {
   requiredTier: TierName;
   preview: {
     headerAlign: 'center' | 'left';
-    accentStyle: 'bar' | 'underline' | 'sidebar';
+    accentStyle: 'bar' | 'underline' | 'sidebar' | 'none';
+    sectionHeaderAlign: 'center' | 'left';
+    sectionDivider: 'line' | 'double-line' | 'none';
+    datePosition: 'inline' | 'right' | 'below';
+    skillsLayout: 'bars' | 'tags' | 'list';
+    contactLayout: 'row' | 'centered' | 'columns';
+    nameSize: 'large' | 'xlarge';
+    sectionSpacing: 'compact' | 'normal' | 'relaxed';
   };
 }
 
@@ -17,9 +27,19 @@ export const RESUME_TEMPLATES: ResumeTemplate[] = [
     id: 'classic',
     name: 'Classic',
     description: 'Clean centered layout, works everywhere',
-    themeColor: '#cb37d8',
+    themeColor: DEFAULT_THEME_COLOR,
     requiredTier: 'free',
-    preview: { headerAlign: 'center', accentStyle: 'bar' },
+    preview: {
+      headerAlign: 'center',
+      accentStyle: 'bar',
+      sectionHeaderAlign: 'center',
+      sectionDivider: 'line',
+      datePosition: 'inline',
+      skillsLayout: 'bars',
+      contactLayout: 'row',
+      nameSize: 'large',
+      sectionSpacing: 'normal',
+    },
   },
   {
     id: 'professional',
@@ -27,7 +47,17 @@ export const RESUME_TEMPLATES: ResumeTemplate[] = [
     description: 'Conservative blue, ideal for corporate roles',
     themeColor: '#2871a1',
     requiredTier: 'free',
-    preview: { headerAlign: 'center', accentStyle: 'underline' },
+    preview: {
+      headerAlign: 'center',
+      accentStyle: 'underline',
+      sectionHeaderAlign: 'center',
+      sectionDivider: 'double-line',
+      datePosition: 'right',
+      skillsLayout: 'tags',
+      contactLayout: 'centered',
+      nameSize: 'xlarge',
+      sectionSpacing: 'relaxed',
+    },
   },
   {
     id: 'modern',
@@ -35,7 +65,17 @@ export const RESUME_TEMPLATES: ResumeTemplate[] = [
     description: 'Fresh green accent for tech and startups',
     themeColor: '#059669',
     requiredTier: 'free',
-    preview: { headerAlign: 'left', accentStyle: 'bar' },
+    preview: {
+      headerAlign: 'left',
+      accentStyle: 'bar',
+      sectionHeaderAlign: 'left',
+      sectionDivider: 'none',
+      datePosition: 'below',
+      skillsLayout: 'list',
+      contactLayout: 'columns',
+      nameSize: 'xlarge',
+      sectionSpacing: 'compact',
+    },
   },
   {
     id: 'executive',
@@ -43,7 +83,17 @@ export const RESUME_TEMPLATES: ResumeTemplate[] = [
     description: 'Bold navy for senior leadership roles',
     themeColor: '#1e3a5f',
     requiredTier: 'pro',
-    preview: { headerAlign: 'left', accentStyle: 'sidebar' },
+    preview: {
+      headerAlign: 'left',
+      accentStyle: 'sidebar',
+      sectionHeaderAlign: 'left',
+      sectionDivider: 'line',
+      datePosition: 'right',
+      skillsLayout: 'list',
+      contactLayout: 'columns',
+      nameSize: 'large',
+      sectionSpacing: 'relaxed',
+    },
   },
   {
     id: 'creative',
@@ -51,7 +101,17 @@ export const RESUME_TEMPLATES: ResumeTemplate[] = [
     description: 'Vibrant purple for design and marketing',
     themeColor: '#7c3aed',
     requiredTier: 'pro',
-    preview: { headerAlign: 'center', accentStyle: 'bar' },
+    preview: {
+      headerAlign: 'center',
+      accentStyle: 'bar',
+      sectionHeaderAlign: 'center',
+      sectionDivider: 'none',
+      datePosition: 'inline',
+      skillsLayout: 'tags',
+      contactLayout: 'centered',
+      nameSize: 'xlarge',
+      sectionSpacing: 'normal',
+    },
   },
   {
     id: 'minimal',
@@ -59,7 +119,17 @@ export const RESUME_TEMPLATES: ResumeTemplate[] = [
     description: 'Understated charcoal, maximum readability',
     themeColor: '#374151',
     requiredTier: 'pro',
-    preview: { headerAlign: 'left', accentStyle: 'underline' },
+    preview: {
+      headerAlign: 'left',
+      accentStyle: 'none',
+      sectionHeaderAlign: 'left',
+      sectionDivider: 'line',
+      datePosition: 'right',
+      skillsLayout: 'list',
+      contactLayout: 'row',
+      nameSize: 'large',
+      sectionSpacing: 'compact',
+    },
   },
 ];
 

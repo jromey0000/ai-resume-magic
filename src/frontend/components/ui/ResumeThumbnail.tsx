@@ -3,8 +3,10 @@ interface ResumeThumbnailProps {
   className?: string;
 }
 
+import { DEFAULT_THEME_COLOR } from '@/lib/templates';
+
 function ResumeThumbnail({ resume, className = '' }: ResumeThumbnailProps) {
-  const themeColor = resume.themeColor || '#cb37d8';
+  const themeColor = resume.themeColor || DEFAULT_THEME_COLOR;
   const name = [resume.firstName, resume.lastName].filter(Boolean).join(' ') || 'Your Name';
   const hasContent = Boolean(resume.firstName || resume.summary || resume.experience?.length);
 

@@ -71,8 +71,22 @@ interface UserResume {
   data: {
     title: string;
     resumeId: string;
-    userName: string;
-    userEmail: string;
+    userName?: string;
+    userEmail?: string;
+    status?: 'draft' | 'published';
+    firstName?: string;
+    lastName?: string;
+    jobTitle?: string;
+    address?: string;
+    phone?: string;
+    email?: string;
+    summary?: string;
+    experience?: WorkExperience[];
+    education?: Education[];
+    skills?: Skill[];
+    themeColor?: string;
+    templateId?: string;
+    atsScore?: number;
   };
 }
 

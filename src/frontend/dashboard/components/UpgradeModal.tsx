@@ -1,4 +1,5 @@
 import { Building2, Check, Crown, Sparkles, X, Zap } from 'lucide-react';
+import { useNavigate } from 'react-router-dom';
 import Button from '@/components/ui/Button';
 import { TIER_CONFIGS, type TierName, useTier } from '@/lib/contexts/TierContext';
 
@@ -60,15 +61,16 @@ function FeatureValue({ value }: { value: string | boolean }) {
 }
 
 export default function UpgradeModal({ isOpen, onClose }: UpgradeModalProps) {
-  const { tier: currentTier, setTier } = useTier();
+  const { tier: currentTier } = useTier();
+  const navigate = useNavigate();
 
   if (!isOpen) return null;
 
   const tiers: TierName[] = ['free', 'pro', 'enterprise'];
 
   const handleSelectTier = (tierName: TierName) => {
-    setTier(tierName);
     onClose();
+    navigate('/dashboard/settings', { state: { selectedPlan: tierName } });
   };
 
   return (

@@ -26,7 +26,7 @@ export interface TierInfo {
   name: TierName;
   displayName: string;
   price: string;
-  period: string;
+  period: 'forever' | 'one-time';
   limits: TierLimits;
 }
 declare const TIER_CONFIGS: Record<TierName, TierInfo>;

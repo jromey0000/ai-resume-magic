@@ -1,4 +1,5 @@
 import {
+  Building2,
   Check,
   Clock,
   Mail,
@@ -11,6 +12,7 @@ import {
   X,
 } from 'lucide-react';
 import { useState } from 'react';
+import { Link } from 'react-router-dom';
 import Button from '@/components/ui/Button';
 import { useTier } from '@/lib/contexts/TierContext';
 
@@ -188,9 +190,15 @@ export default function TeamManagement() {
         <h3 className="text-xl font-semibold text-cod-gray-900 dark:text-white mb-2">
           Team Management
         </h3>
-        <p className="text-cod-gray-500 dark:text-cod-gray-400 max-w-md">
+        <p className="text-cod-gray-500 dark:text-cod-gray-400 max-w-md mb-6">
           Upgrade to Enterprise to manage team members, assign roles, and collaborate on resumes.
         </p>
+        <Link to="/dashboard/settings">
+          <Button variant="primary">
+            <Building2 className="w-4 h-4 mr-2" />
+            Upgrade to Enterprise
+          </Button>
+        </Link>
       </div>
     );
   }

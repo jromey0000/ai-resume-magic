@@ -5,14 +5,16 @@ module.exports = {
   content: ['./src/**/*.{html,js}'],
   theme: {
     extend: {
-      // Set font family
       fontFamily: {
         sans: ['Inter', ...defaultTheme.fontFamily.sans],
       },
-      // Set theme colors (Required config!)
       colors: {
-        primary: '#74B6DA',
-        secondary: colors.slate,
+        primary: 'var(--primary)',
+        'primary-hover': 'var(--primary-hover)',
+        secondary: 'var(--secondary)',
+        success: 'var(--success)',
+        warning: 'var(--warning)',
+        error: 'var(--error)',
       },
       keyframes: {
         animatedgradient: {
@@ -29,6 +31,5 @@ module.exports = {
       sans: ['Inter', ...defaultTheme.fontFamily.sans],
     },
   },
-  // Add plugins
   plugins: [require('@tailwindcss/typography'), require('@tailwindcss/forms')],
 };
